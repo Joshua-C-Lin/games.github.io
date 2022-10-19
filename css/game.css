@@ -57,6 +57,8 @@ body {
   justify-content: flex-start;
   width: 800px;
   margin: 10px auto;
+  /* perspective: 5000; */
+  /* transform: translateZ(100px); */
 }
 
 .cube {
@@ -68,6 +70,7 @@ body {
   transition: transform 1s;
   transform-style: preserve-3d;
   cursor: pointer;
+  perspective: 800px;
 }
 
 .cube:hover {
@@ -76,7 +79,7 @@ body {
 }
 
 .cube.active {
-  transform: rotateY(180deg);
+  transform: perspective(500px) rotateY(180deg);
 }
 
 .card-face {
@@ -98,7 +101,7 @@ body {
   background-size: 70%;
   background-position: center;
   background-repeat: no-repeat;
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(1px);
 }
 
 @media only screen and (max-width: 600px) {
