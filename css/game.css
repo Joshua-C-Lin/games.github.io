@@ -107,6 +107,7 @@ body {
 @media only screen and (max-width: 600px) {
   .neon {
     width: 58%;
+    font-size: 2rem;
   }
 
   .game-table {
