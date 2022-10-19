@@ -26,17 +26,11 @@
 
       // 翻開卡片
       function switchCard(index) {
-        console.log(
-          "He點擊到的是--->",
-          cubesData[index].name,
-          "第",
-          index,
-          "個"
-        );
+        console.log(' Clicked！！！')
         document.getElementById(index).classList.add("active");
-        console.log("上一個name--->", test);
-        console.log("上一個id--->", preIndex);
-        console.log("現在是", cubesData[index].name);
+        // console.log("上一個name--->", test);
+        // console.log("上一個id--->", preIndex);
+        // console.log("現在是", cubesData[index].name);
         setTimeout(function () {
           if (isFirstSelect) {
             test = cubesData[index].name;
@@ -44,9 +38,11 @@
             console.log("第一次存資料", test, preIndex);
             isFirstSelect = false;
           } else {
-            if (test === cubesData[index].name) {
-              // test = cubesData[index].name;
-              // preIndex = index;
+            if (test === cubesData[index].name && preIndex !== index) {
+              $(`#${index}`).removeAttr("onclick");
+              console.log('Stop', index)
+              $(`#${preIndex}`).removeAttr("onclick");
+              console.log('Stop', preIndex)
               console.log("END --- 配對成功");
             } else {
               document.getElementById(index).classList.remove("active");
