@@ -37,20 +37,6 @@
         console.log("上一個name--->", test);
         console.log("上一個id--->", preIndex);
         console.log("現在是", cubesData[index].name);
-        // setTimeout(function () {
-        // if (test === cubesData[index].name || test === "" || preIndex === -1) {
-        //   test = cubesData[index].name;
-        //   preIndex = index;
-        //   console.log("END --- 配對成功");
-        //   return;
-        // } else {
-        //   document.getElementById(index).classList.remove("active");
-        //   document.getElementById(preIndex).classList.remove("active");
-        //   test = "";
-        //   preIndex = -1;
-        //   console.log("END2 --- 配對失敗");
-        // }
-        // }, 1000);
         setTimeout(function () {
           if (isFirstSelect) {
             test = cubesData[index].name;
