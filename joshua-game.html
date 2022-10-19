@@ -40,6 +40,8 @@
           } else {
             if (test === cubesData[index].name && preIndex !== index) {
               $(`#${index}`).removeAttr("onclick");
+              document.getElementById(index).classList.remove("finger-on");
+              document.getElementById(preIndex).classList.remove("finger-on");
               console.log('Stop', index)
               $(`#${preIndex}`).removeAttr("onclick");
               console.log('Stop', preIndex)
@@ -136,7 +138,7 @@
       console.log("洗牌之後", cubesData);
 
       for (var i = 0; i < cubesData.length; i++) {
-        item = `<div onclick="switchCard(${i})" id="${i}" class="cube">`;
+        item = `<div onclick="switchCard(${i})" id="${i}" class="cube finger-on">`;
         item += '<div class="card-face card-front"></div>';
         item += `<div class="card-face card-back" style="background-image: url(${cubesData[i].path});"></div>`;
         item += "</div>";
