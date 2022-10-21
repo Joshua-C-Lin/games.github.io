@@ -6,7 +6,11 @@
     <title>Joshua Game</title>
     <link rel="icon" type="image/png" href="./icon/ace-of-diamonds.png" />
     <link href="./css/game.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.js"
+      integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div class="main-page">
@@ -26,12 +30,14 @@
 
       // 翻開卡片
       function switchCard(index) {
-        console.log(' Clicked！！！')
-        document.getElementById(index).classList.add("active");
-        // console.log("上一個name--->", test);
-        // console.log("上一個id--->", preIndex);
-        // console.log("現在是", cubesData[index].name);
-        setTimeout(function () {
+        if(cubesData[index].isActive){
+          return
+        }
+        console.log(" Clicked！！！");
+        // document.getElementById(index).classList.add("active");
+        // (cubesData[index].isActive = true), console.log(cubesData);
+        cubesData[index].isActive = true;
+        // setTimeout(function () {
           if (isFirstSelect) {
             test = cubesData[index].name;
             preIndex = index;
@@ -39,23 +45,21 @@
             isFirstSelect = false;
           } else {
             if (test === cubesData[index].name && preIndex !== index) {
-              $(`#${index}`).removeAttr("onclick");
-              document.getElementById(index).classList.remove("finger-on");
-              document.getElementById(preIndex).classList.remove("finger-on");
-              console.log('Stop', index)
-              $(`#${preIndex}`).removeAttr("onclick");
-              console.log('Stop', preIndex)
               console.log("END --- 配對成功");
             } else {
-              document.getElementById(index).classList.remove("active");
-              document.getElementById(preIndex).classList.remove("active");
-              console.log("END2 --- 配對失敗");
+              setTimeout((index, preIndex)=>{
+                cubesData[index].isActive = false
+                cubesData[preIndex].isActive = false
+                console.log("END2 --- 配對失敗");
+                render()
+              }, 1000,index, preIndex)
             }
             test = "";
             preIndex = -1;
             isFirstSelect = true;
           }
-        }, 1000);
+        // }, 1000);
+        render()
       }
 
       // 生成 Cube
@@ -63,66 +67,82 @@
         {
           name: "spades",
           path: "./icon/spades.png",
+          isActive: false,
         },
         {
           name: "hearts",
           path: "./icon/hearts.png",
+          isActive: false,
         },
         {
           name: "clover",
           path: "./icon/clover.png",
+          isActive: false,
         },
         {
           name: "diamonds",
           path: "./icon/diamonds.png",
+          isActive: false,
         },
         {
           name: "spades",
           path: "./icon/spades.png",
+          isActive: false,
         },
         {
           name: "hearts",
           path: "./icon/hearts.png",
+          isActive: false,
         },
         {
           name: "clover",
           path: "./icon/clover.png",
+          isActive: false,
         },
         {
           name: "diamonds",
           path: "./icon/diamonds.png",
+          isActive: false,
         },
         {
           name: "spades",
           path: "./icon/spades.png",
+          isActive: false,
         },
         {
           name: "hearts",
           path: "./icon/hearts.png",
+          isActive: false,
         },
         {
           name: "clover",
           path: "./icon/clover.png",
+          isActive: false,
         },
         {
           name: "diamonds",
           path: "./icon/diamonds.png",
+          isActive: false,
         },
         {
           name: "spades",
           path: "./icon/spades.png",
+          isActive: false,
         },
         {
           name: "hearts",
           path: "./icon/hearts.png",
+          isActive: false,
         },
         {
           name: "clover",
           path: "./icon/clover.png",
+          isActive: false,
         },
         {
           name: "diamonds",
           path: "./icon/diamonds.png",
+          isActive: false,
         },
       ];
 
@@ -136,28 +156,36 @@
 
       shuffle(cubesData);
       console.log("洗牌之後", cubesData);
+      // cubesData[index].allowClick
+      // onclick="switchCard(${i})"
+      function render() {
+        $("#arrayCube").html('');
+        for (var i = 0; i < cubesData.length; i++) {
+          item = `<div onclick="switchCard(${i})" id="${i}" class="cube ${ cubesData[i].isActive === false ? "finger-on" : "" }">`;
+          item += '<div class="card-face card-front"></div>';
+          item += `<div class="card-face card-back" style="background-image: url(${cubesData[i].path});"></div>`;
+          item += "</div>";
 
-      for (var i = 0; i < cubesData.length; i++) {
-        item = `<div onclick="switchCard(${i})" id="${i}" class="cube finger-on">`;
-        item += '<div class="card-face card-front"></div>';
-        item += `<div class="card-face card-back" style="background-image: url(${cubesData[i].path});"></div>`;
-        item += "</div>";
-        $("#arrayCube").append(item);
+          // item = `<div onclick="switchCard(${i})" id="${i}" class="${ cubesData[i].isActive === true ? "active" : "" } cube ${ cubesData[i].isActive === false ? "finger-on" : "" }">`;
+          // item += '<div class="card-face card-front"></div>';
+          // item += `<div class="card-face card-back" style="background-image: url(${cubesData[i].path});"></div>`;
+          // item += "</div>";
+          $("#arrayCube").append(item);
+          if (cubesData[i].isActive === true) {
+            setTimeout(function (i) {
+              document.getElementById(i).classList.add("active");
+            }, 500, i)
+          }
+        }
       }
-
-      // addEventListener(
-      //   "click",
-      //   function (e) {
-      //     console.log('監控點擊目標', e);
-      //   },
-      //   false
-      // );
 
       // 重開一局
       var newGame = () => {
         alert("New Game On!!!");
         window.location.reload();
       };
+
+      render()
     </script>
   </body>
 </html>
