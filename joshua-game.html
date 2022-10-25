@@ -26,40 +26,48 @@
       // -1 表示尚未選擇
       let preIndex = -1;
 
+      let firstIndex = -1;
+
       let isFirstSelect = true;
 
       // 翻開卡片
       function switchCard(index) {
-        if(cubesData[index].isActive){
-          return
+        if (cubesData[index].isActive) {
+          return;
         }
         console.log(" Clicked！！！");
         // document.getElementById(index).classList.add("active");
         // (cubesData[index].isActive = true), console.log(cubesData);
         cubesData[index].isActive = true;
         // setTimeout(function () {
-          if (isFirstSelect) {
-            test = cubesData[index].name;
-            preIndex = index;
-            console.log("第一次存資料", test, preIndex);
-            isFirstSelect = false;
+        if (isFirstSelect) {
+          test = cubesData[index].name;
+          firstIndex = index;
+          preIndex = index;
+          console.log("第一次存資料", test, preIndex);
+          isFirstSelect = false;
+        } else {
+          if (test === cubesData[index].name && preIndex !== index) {
+            console.log("END --- 配對成功");
           } else {
-            if (test === cubesData[index].name && preIndex !== index) {
-              console.log("END --- 配對成功");
-            } else {
-              setTimeout((index, preIndex)=>{
-                cubesData[index].isActive = false
-                cubesData[preIndex].isActive = false
+            setTimeout(
+              (index, preIndex) => {
+                cubesData[index].isActive = false;
+                cubesData[preIndex].isActive = false;
                 console.log("END2 --- 配對失敗");
-                render()
-              }, 1000,index, preIndex)
-            }
-            test = "";
-            preIndex = -1;
-            isFirstSelect = true;
+                render(index);
+              },
+              1000,
+              index,
+              preIndex
+            );
           }
+          test = "";
+          preIndex = -1;
+          isFirstSelect = true;
+        }
         // }, 1000);
-        render()
+        render(index);
       }
 
       // 生成 Cube
@@ -156,26 +164,58 @@
 
       shuffle(cubesData);
       console.log("洗牌之後", cubesData);
-      // cubesData[index].allowClick
-      // onclick="switchCard(${i})"
-      function render() {
-        $("#arrayCube").html('');
+
+      // 判斷已翻牌
+      function isNeedToRender(index, i) {
+        var initRenderStatus = "";
+        if (cubesData[i].isActive === false) {
+          initRenderStatus = "finger-on";
+          return initRenderStatus;
+        }
+        if (index !== i) {
+          initRenderStatus = "active";
+          return initRenderStatus;
+        }
+      }
+
+      function render(index) {
+        $("#arrayCube").html("");
         for (var i = 0; i < cubesData.length; i++) {
-          item = `<div onclick="switchCard(${i})" id="${i}" class="cube ${ cubesData[i].isActive === false ? "finger-on" : "" }">`;
+          item = `<div onclick="switchCard(${i})" id="${i}" class="cube ${isNeedToRender(
+            index,
+            i
+          )}">`;
           item += '<div class="card-face card-front"></div>';
           item += `<div class="card-face card-back" style="background-image: url(${cubesData[i].path});"></div>`;
           item += "</div>";
 
-          // item = `<div onclick="switchCard(${i})" id="${i}" class="${ cubesData[i].isActive === true ? "active" : "" } cube ${ cubesData[i].isActive === false ? "finger-on" : "" }">`;
-          // item += '<div class="card-face card-front"></div>';
-          // item += `<div class="card-face card-back" style="background-image: url(${cubesData[i].path});"></div>`;
-          // item += "</div>";
           $("#arrayCube").append(item);
-          if (cubesData[i].isActive === true) {
-            setTimeout(function (i) {
-              document.getElementById(i).classList.add("active");
-            }, 500, i)
+
+          if (cubesData[i].isActive === true && index === i) {
+            setTimeout(
+              function (i) {
+                console.log('這個',cubesData[i].name)
+                console.log('上個',cubesData[firstIndex].name)
+                document.getElementById(i).classList.add("active");
+              },
+              500,
+              i
+            );
           }
+
+          // if (cubesData[i].isActive === true && cubesData[i].name !== cubesData[firstIndex].name) {
+          //   document.getElementById(i).classList.add("active");
+          //   document.getElementById(firstIndex).classList.add("active");
+          //   setTimeout(
+          //     function (i) {
+          //       document.getElementById(i).classList.remove("active");
+          //       document.getElementById(firstIndex).classList.remove("active");
+          //     },
+          //     500,
+          //     i,
+          //     firstIndex
+          //   );
+          // }
         }
       }
 
@@ -185,7 +225,7 @@
         window.location.reload();
       };
 
-      render()
+      render();
     </script>
   </body>
 </html>
