@@ -35,11 +35,7 @@
         if (cubesData[index].isActive) {
           return;
         }
-        console.log(" Clicked！！！");
-        // document.getElementById(index).classList.add("active");
-        // (cubesData[index].isActive = true), console.log(cubesData);
         cubesData[index].isActive = true;
-        // setTimeout(function () {
         if (isFirstSelect) {
           test = cubesData[index].name;
           firstIndex = index;
@@ -47,15 +43,14 @@
           console.log("第一次存資料", test, preIndex);
           isFirstSelect = false;
         } else {
+          console.log("第二次存資料", test, index);
           if (test === cubesData[index].name && preIndex !== index) {
             console.log("END --- 配對成功");
           } else {
             setTimeout(
               (index, preIndex) => {
-                cubesData[index].isActive = false;
-                cubesData[preIndex].isActive = false;
                 console.log("END2 --- 配對失敗");
-                render(index);
+                render(index, preIndex);
               },
               1500,
               index,
@@ -66,8 +61,7 @@
           preIndex = -1;
           isFirstSelect = true;
         }
-        // }, 1000);
-        render(index);
+        render(index, preIndex);
       }
 
       // 生成 Cube
@@ -166,19 +160,19 @@
       console.log("洗牌之後", cubesData);
 
       // 判斷已翻牌
-      function isNeedToRender(index, i) {
+      function isNeedToRender(index, i, preIndex) {
         var initRenderStatus = "";
         if (cubesData[i].isActive === false) {
           initRenderStatus = "finger-on";
           return initRenderStatus;
         }
-        if (index !== i) {
+        if (index !== i ) {
           initRenderStatus = "active";
           return initRenderStatus;
         }
       }
 
-      function render(index) {
+      function render(index, preIndex) {
         $("#arrayCube").html("");
         for (var i = 0; i < cubesData.length; i++) {
           item = `<div onclick="switchCard(${i})" id="${i}" class="cube ${isNeedToRender(
@@ -193,13 +187,28 @@
 
           if (cubesData[i].isActive === true && index === i) {
             setTimeout(
-              function (i) {
-                console.log('這個',cubesData[i].name)
-                console.log('上個',cubesData[firstIndex].name)
+              function (i, preIndex) {
                 document.getElementById(i).classList.add("active");
+                // document.getElementById(preIndex).classList.add("active");
+                console.log('目前翻開', i)
+                console.log('之前翻開', preIndex)
+                
+                if (cubesData[preIndex].name !== cubesData[index].name) {
+                  console.log(cubesData[preIndex].name, '對比', cubesData[i].name)
+                  
+                  document.getElementById(i).classList.remove("active");
+                  cubesData[i].isActive = false
+                  console.log('移除cubesData[i].name', cubesData[i].name)
+
+                  document.getElementById(preIndex).classList.remove("active");
+                  cubesData[preIndex].isActive = false
+                  console.log('移除cubesData[preIndex].name', cubesData[preIndex].name)
+
+                }
               },
               500,
-              i
+              i,
+              preIndex
             );
           }
         }
